@@ -1,0 +1,89 @@
+// JSBox: HTML'yi webview içinde çalıştır
+const html = `
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Sayaç</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { background: #222; color: yellow; font-family: Verdana, Arial, sans-serif; margin: 0; padding: 20px; }
+    .counter { font-size: 22px; margin: 10px 0; }
+    .buttons { margin: 20px 0; display: flex; flex-direction: column; gap: 8px; max-width: 300px; }
+    button { width: 100%; height: 50px; font-size: 18px; border-radius: 8px; border: none; background: #444; color: #fff; }
+    button:active { background: #666; }
+    #detay { font-size: 18px; color: yellow; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Sayaç</h1>
+  <div class="counter">
+    <span id="count">1</span> /
+    <span id="say">27</span>
+  </div>
+  <div id="detay">MERKEZ NOKTA VE İÇİNDEKİ NEGATİF SEBATİ, İNANÇ VE DUYGULAR</div>
+
+  <div class="buttons">
+    <button onclick="merkez()">Merkez Nokta</button>
+    <button onclick="kalp()">Kalp</button>
+    <button onclick="komuta()">Beyin Komuta Merkezi</button>
+    <button onclick="kafes()">Beyindeki Kafes</button>
+    <button onclick="bolge()">Beyin soldaki 9 bölge</button>
+    <button onclick="silme()">Sıfırla</button>
+  </div>
+
+  <script>
+    let count = 1;
+    let say = 27;
+    let calisma = 1;
+    let detay = "MERKEZ NOKTA VE İÇİNDEKİ NEGATİF SEBATİ, İNANÇ VE DUYGULAR";
+
+    function updateUI() {
+      document.getElementById("count").textContent = count;
+      document.getElementById("say").textContent = say;
+      document.getElementById("detay").textContent = detay;
+    }
+
+    function sayma() {
+      count++;
+      if (count === 28 && calisma === 1) { count = 0; kalp(); return; }
+      if (count === 12 && calisma === 2) { count = 0; komuta(); return; }
+      if (count === 4  && calisma === 3) { count = 0; kafes();  return; }
+      if (count === 6  && calisma === 4) { count = 0; bolge();  return; }
+      if (count === 10 && calisma === 5) { count = 0; alert("Program bitti"); return; }
+      updateUI();
+    }
+
+    function silme() { count = 0; updateUI(); }
+    function merkez() { calisma = 1; say = 27; count = 1; detay = "MERKEZ NOKTA VE İÇİNDEKİ NEGATİF SEBATİ, İNANÇ VE DUYGULAR"; updateUI(); }
+    function kalp()   { calisma = 2; say = 11; count = 1; detay = "KALP VE KALBİN .. SEVİYESİNDE YER ALAN NEGATİF DUYGULAR"; updateUI(); }
+    function komuta() { calisma = 3; say = 3;  count = 1; detay = "BEYİN KOMUTA MERKEZİNDE OLUŞAN HASARIN ŞİFALANMASI"; updateUI(); }
+    function kafes()  { calisma = 4; say = 5;  count = 1; detay = "BEYİNDEKİ KAFESİN TEMİZLENMESİ"; updateUI(); }
+    function bolge()  { calisma = 5; say = 9;  count = 1; detay = "BEYNİN SOL TARAFINDAKİ 9 BÖLGENİN .. BÖLGESİNİN TEMİZLENMESİ"; updateUI(); }
+
+    document.addEventListener("keydown", function(event) {
+      if (event.code === "Space") { sayma(); }
+    });
+    
+    // Ekranın herhangi bir yerine dokunulduğunda sayaç artar
+    document.addEventListener("click", function() {
+      sayma();
+    });
+    
+
+    updateUI();
+  </script>
+</body>
+</html>
+`;
+
+$ui.render({
+  props: { title: "Sayaç" },
+  views: [
+    {
+      type: "web",
+      props: { html: html },
+      layout: $layout.fill
+    }
+  ]
+});
